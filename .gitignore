@@ -1,0 +1,24 @@
+# Ambiente virtuale
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+db.sqlite3
+*.log
+media/
+
+# Variabili ambiente / segreti
+.env
+
+# VS Code
+.vscode/
+
+.vs/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
