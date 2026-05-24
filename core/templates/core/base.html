@@ -24,7 +24,7 @@
                 <a href="{% url 'index' %}">Home</a>
 
                 <!-- Link temporaneo: verrà collegato alla lista servizi -->
-                <a href="#">Servizi</a>
+                <a href="{% url 'service-list' %}">Servizi</a>
 
                 {% if user.is_authenticated %}
                     <!-- Nome utente visibile quando l'utente è autenticato -->

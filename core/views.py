@@ -1,6 +1,8 @@
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render
 
-from .models import Appointment, ProfessionalProfile, Service
+from .models import Appointment, ProfessionalProfile, Service, ServiceCategory
 
 
 def index(request):
@@ -23,3 +25,46 @@ def index(request):
     }
 
     return render(request, "core/home.html", context)
+
+
+def service_list(request):
+    # Parametri letti dalla query string.
+    # Esempio: /servizi/?q=documenti&category=1
+    query = request.GET.get("q", "").strip()
+    selected_category = request.GET.get("category", "").strip()
+
+    # Mostriamo solo i servizi attivi nella parte pubblica del sito.
+    services = Service.objects.filter(is_active=True).select_related("category")
+
+    # Ricerca server-side su nome, descrizione e categoria.
+    if query:
+        services = services.filter(
+            Q(name__icontains=query)
+            | Q(description__icontains=query)
+            | Q(category__name__icontains=query)
+        )
+
+    # Filtro opzionale per categoria.
+    if selected_category:
+        services = services.filter(category_id=selected_category)
+
+    # Ordinamento stabile prima della paginazione.
+    services = services.order_by("name")
+
+    # Paginazione: 3 servizi per pagina, utile per dimostrare il requisito.
+    paginator = Paginator(services, 3)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    # Categorie usate nella select del filtro.
+    categories = ServiceCategory.objects.all().order_by("name")
+
+    context = {
+        "page_obj": page_obj,
+        "services": page_obj.object_list,
+        "categories": categories,
+        "query": query,
+        "selected_category": selected_category,
+    }
+
+    return render(request, "core/service_list.html", context)

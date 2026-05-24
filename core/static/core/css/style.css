@@ -211,6 +211,152 @@ body {
     }
 
     .hero-text h1 {
-        font-size: 2rem;
+    font-size: 2rem;
+}
+}
+
+/* Titolo delle pagine interne */
+.page-heading {
+    margin-bottom: 28px;
+}
+
+.page-heading h1 {
+    margin: 0 0 12px;
+    font-size: 2rem;
+}
+
+.page-heading p {
+    max-width: 720px;
+    line-height: 1.6;
+}
+
+/* Box ricerca servizi */
+.search-panel {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    margin-bottom: 28px;
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 18px;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select {
+    min-height: 44px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 1rem;
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Lista servizi */
+.services-list {
+    display: grid;
+    gap: 18px;
+}
+
+.service-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.service-card h2 {
+    margin: 8px 0 10px;
+}
+
+.service-card p {
+    line-height: 1.5;
+}
+
+.service-category {
+    color: #2563eb;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.service-meta {
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.service-meta span {
+    color: #6b7280;
+}
+
+.service-meta strong {
+    font-size: 1.4rem;
+}
+
+/* Stato vuoto della lista */
+.empty-state {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+/* Navigazione pagine */
+.pagination {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    align-items: center;
+}
+
+.pagination a {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    text-decoration: underline;
+}
+
+/* Layout responsive della pagina servizi */
+@media (max-width: 800px) {
+    .search-form {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card {
+        flex-direction: column;
+    }
+
+    .service-meta {
+        align-items: flex-start;
     }
 }

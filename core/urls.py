@@ -7,4 +7,7 @@ from . import views
 urlpatterns = [
     # Home pubblica di Appunto.
     path("", views.index, name="index"),
+
+    # Lista pubblica dei servizi con ricerca e paginazione.
+    path("servizi/", views.service_list, name="service-list"),
 ]
