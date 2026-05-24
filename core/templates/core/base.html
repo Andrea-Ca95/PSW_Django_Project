@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Titolo modificabile dai template figli -->
+    <title>{% block title %}Appunto{% endblock %}</title>
+
+    <!-- Layout responsive anche su schermi piccoli -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS principale del progetto -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <!-- Logo con link alla home -->
+            <a class="logo" href="{% url 'index' %}">Appunto</a>
+
+            <nav class="main-nav">
+                <a href="{% url 'index' %}">Home</a>
+
+                <!-- Link temporaneo: verrà collegato alla lista servizi -->
+                <a href="#">Servizi</a>
+
+                {% if user.is_authenticated %}
+                    <!-- Nome utente visibile quando l'utente è autenticato -->
+                    <span class="nav-user">Utente: {{ user.get_username }}</span>
+                {% else %}
+                    <!-- Link temporaneo: verrà collegato alla login Django -->
+                    <a href="#">Login</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <!-- Contenuto specifico delle singole pagine -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>Appunto - Prenotazioni per studi professionali</p>
+    </footer>
+</body>
+</html>

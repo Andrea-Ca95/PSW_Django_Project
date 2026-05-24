@@ -1,0 +1,216 @@
+/* Reset minimo per rendere più prevedibile il layout */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1f2937;
+    background: #f5f7fb;
+}
+
+/* Barra superiore del sito */
+.site-header {
+    background: #1f2937;
+    color: #ffffff;
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo testuale di Appunto */
+.logo {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Navigazione principale */
+.main-nav {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.main-nav a,
+.nav-user {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.main-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Contenitore centrale delle pagine */
+.page-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+/* Sezione iniziale della home */
+.hero {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+}
+
+.hero-text,
+.hero-card,
+.stat-card,
+.feature-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.hero-text {
+    padding: 42px;
+}
+
+.hero-text h1 {
+    margin: 0 0 18px;
+    font-size: 2.4rem;
+    line-height: 1.15;
+}
+
+.hero-text p {
+    max-width: 680px;
+    line-height: 1.6;
+}
+
+/* Etichetta sopra al titolo principale */
+.eyebrow {
+    margin: 0 0 12px;
+    color: #2563eb;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+}
+
+.hero-actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+/* Pulsanti generici */
+.button {
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.button.primary {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.button.secondary {
+    background: #e5e7eb;
+    color: #1f2937;
+}
+
+/* Card laterale della hero */
+.hero-card {
+    padding: 28px;
+}
+
+/* Box del contatore visite in sessione */
+.visit-box {
+    margin-top: 24px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #eff6ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.visit-box strong {
+    font-size: 2rem;
+    color: #2563eb;
+}
+
+/* Griglie della home */
+.stats-grid,
+.feature-grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.stat-card,
+.feature-card {
+    padding: 24px;
+}
+
+.stat-card span {
+    display: block;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.stat-card strong {
+    font-size: 2rem;
+    color: #111827;
+}
+
+.info-section {
+    margin-top: 44px;
+}
+
+.feature-card h3 {
+    margin-top: 0;
+}
+
+.feature-card p {
+    line-height: 1.5;
+}
+
+/* Footer semplice */
+.site-footer {
+    margin-top: 40px;
+    padding: 22px;
+    text-align: center;
+    color: #6b7280;
+}
+
+/* Adattamento per tablet e smartphone */
+@media (max-width: 800px) {
+    .header-content,
+    .main-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero,
+    .stats-grid,
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-text {
+        padding: 28px;
+    }
+
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+}

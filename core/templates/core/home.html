@@ -1,0 +1,86 @@
+{% extends "core/base.html" %}
+
+{% block title %}Home - Appunto{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <p class="eyebrow">Studio professionale generico</p>
+
+        <h1>Gestisci appuntamenti e servizi con Appunto</h1>
+
+        <p>
+            Appunto è una web app per prenotare servizi presso uno studio professionale
+            non medico. I clienti possono consultare i servizi disponibili e richiedere
+            appuntamenti con i professionisti dello studio.
+        </p>
+
+        <div class="hero-actions">
+            <!-- Link temporanei: verranno collegati quando creeremo servizi e login -->
+            <a class="button primary" href="#">Consulta i servizi</a>
+            <a class="button secondary" href="#">Accedi</a>
+        </div>
+    </div>
+
+    <div class="hero-card">
+        <h2>Area progetto PSW</h2>
+
+        <p>
+            Questa home usa template Django, CSS statico e sessione tramite cookie.
+        </p>
+
+        <div class="visit-box">
+            <span>Visite in questa sessione</span>
+            <strong>{{ num_visits }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <!-- Dati calcolati nella view index -->
+    <article class="stat-card">
+        <span>Servizi attivi</span>
+        <strong>{{ active_services_count }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Professionisti</span>
+        <strong>{{ professionals_count }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Appuntamenti registrati</span>
+        <strong>{{ appointments_count }}</strong>
+    </article>
+</section>
+
+<section class="info-section">
+    <h2>Funzionalità previste</h2>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>Clienti</h3>
+            <p>
+                Registrazione, consultazione servizi, prenotazione appuntamenti
+                e gestione delle proprie richieste.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Professionisti</h3>
+            <p>
+                Visualizzazione degli appuntamenti assegnati e aggiornamento
+                dello stato delle prenotazioni.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Admin</h3>
+            <p>
+                Gestione di servizi, categorie, utenti, profili e appuntamenti
+                tramite pannello amministrativo.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
