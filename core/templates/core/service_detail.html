@@ -1,0 +1,75 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ service.name }} - Appunto{% endblock %}
+
+{% block content %}
+<section class="detail-layout">
+    <article class="detail-card">
+        <a class="back-link" href="{% url 'service-list' %}">← Torna ai servizi</a>
+
+        <p class="eyebrow">
+            {% if service.category %}
+                {{ service.category.name }}
+            {% else %}
+                Servizio
+            {% endif %}
+        </p>
+
+        <h1>{{ service.name }}</h1>
+
+        <p class="detail-description">
+            {{ service.description }}
+        </p>
+
+        <div class="detail-meta-grid">
+            <div class="detail-meta-item">
+                <span>Durata</span>
+                <strong>{{ service.duration_minutes }} minuti</strong>
+            </div>
+
+            <div class="detail-meta-item">
+                <span>Prezzo</span>
+                <strong>€ {{ service.price }}</strong>
+            </div>
+
+            <div class="detail-meta-item">
+                <span>Stato</span>
+                <strong>
+                    {% if service.is_active %}
+                        Disponibile
+                    {% else %}
+                        Non disponibile
+                    {% endif %}
+                </strong>
+            </div>
+        </div>
+
+        <!-- Link temporaneo: verrà collegato al form di prenotazione -->
+        <a class="button primary detail-action" href="#">Prenota questo servizio</a>
+    </article>
+
+    <aside class="detail-side-card">
+        <h2>Professionisti disponibili</h2>
+
+        {% if professionals %}
+            <ul class="professional-list">
+                {% for professional in professionals %}
+                    <li>
+                        <strong>{{ professional }}</strong>
+
+                        {% if professional.bio %}
+                            <p>{{ professional.bio }}</p>
+                        {% endif %}
+
+                        {% if professional.phone %}
+                            <span>Tel: {{ professional.phone }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nessun professionista associato a questo servizio.</p>
+        {% endif %}
+    </aside>
+</section>
+{% endblock %}

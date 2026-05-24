@@ -360,3 +360,103 @@ body {
         align-items: flex-start;
     }
 }
+/* Layout pagina dettaglio servizio */
+.detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.detail-card,
+.detail-side-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.detail-card h1 {
+    margin: 0 0 16px;
+    font-size: 2.2rem;
+}
+
+.detail-description {
+    max-width: 760px;
+    line-height: 1.7;
+}
+
+.detail-meta-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.detail-meta-item {
+    background: #f5f7fb;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.detail-meta-item span {
+    display: block;
+    margin-bottom: 8px;
+    color: #6b7280;
+}
+
+.detail-meta-item strong {
+    font-size: 1.1rem;
+}
+
+.detail-action {
+    margin-top: 28px;
+}
+
+.professional-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.professional-list li {
+    padding: 18px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.professional-list li:last-child {
+    border-bottom: none;
+}
+
+.professional-list p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.professional-list span {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* Layout responsive della pagina dettaglio */
+@media (max-width: 800px) {
+    .detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-meta-grid {
+        grid-template-columns: 1fr;
+    }
+}

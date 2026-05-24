@@ -72,7 +72,7 @@
                     <strong>€ {{ service.price }}</strong>
 
                     <!-- Link temporaneo: verrà collegato alla pagina dettaglio -->
-                    <a class="button secondary" href="#">Dettaglio</a>
+                    <a class="button secondary" href="{{ service.get_absolute_url }}">Dettaglio</a>
                 </div>
             </article>
         {% endfor %}

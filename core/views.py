@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 from .models import Appointment, ProfessionalProfile, Service, ServiceCategory
 
@@ -68,3 +68,25 @@ def service_list(request):
     }
 
     return render(request, "core/service_list.html", context)
+
+
+def service_detail(request, pk):
+    # Recupera solo servizi attivi, evitando dettagli pubblici per servizi disattivati.
+    service = get_object_or_404(
+        Service.objects.select_related("category"),
+        pk=pk,
+        is_active=True,
+    )
+
+    # Professionisti che possono svolgere il servizio selezionato.
+    professionals = service.professionals.select_related("user").order_by(
+        "user__last_name",
+        "user__first_name",
+    )
+
+    context = {
+        "service": service,
+        "professionals": professionals,
+    }
+
+    return render(request, "core/service_detail.html", context)

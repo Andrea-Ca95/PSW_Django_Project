@@ -10,4 +10,7 @@ urlpatterns = [
 
     # Lista pubblica dei servizi con ricerca e paginazione.
     path("servizi/", views.service_list, name="service-list"),
+
+    # Dettaglio pubblico di un singolo servizio.
+    path("servizi/<int:pk>/", views.service_detail, name="service-detail"),
 ]
