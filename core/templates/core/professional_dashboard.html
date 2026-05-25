@@ -6,7 +6,7 @@
 <section class="page-heading">
     <p class="eyebrow">Area riservata</p>
     <h1>Area professionista</h1>
-    <p>Qui puoi visualizzare gli appuntamenti assegnati al tuo profilo.</p>
+    <p>Qui puoi visualizzare e gestire gli appuntamenti assegnati al tuo profilo.</p>
 </section>
 
 <section class="dashboard-card">
@@ -16,20 +16,101 @@
         <div class="appointment-list">
             {% for appointment in appointments %}
                 <article class="appointment-row">
+                    <!-- Dati principali dell'appuntamento -->
                     <div>
                         <h3>{{ appointment.service.name }}</h3>
+
                         <p>
                             Cliente:
                             {{ appointment.customer.get_full_name|default:appointment.customer.username }}
                         </p>
+
                         <p>
                             Data: {{ appointment.date|date:"d/m/Y" }} alle {{ appointment.start_time|time:"H:i" }}
                         </p>
+
+                        {% if appointment.notes %}
+                            <p>Note: {{ appointment.notes }}</p>
+                        {% endif %}
                     </div>
 
-                    <span class="status-badge">
-                        {{ appointment.get_status_display }}
-                    </span>
+                    <!-- Stato e azioni disponibili per il professionista -->
+                    <div class="appointment-side">
+                        <span class="status-badge">
+                            {{ appointment.get_status_display }}
+                        </span>
+
+                        {% if appointment.status == "pending" and not appointment.is_past %}
+                            <!-- Appuntamento futuro in attesa: può essere confermato -->
+                            <form
+                                class="status-form"
+                                method="post"
+                                action="{% url 'professional-update-appointment-status' appointment.id %}"
+                            >
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="confirm">
+                                <button class="button success" type="submit">
+                                    Conferma
+                                </button>
+                            </form>
+
+                            <!-- Appuntamento futuro in attesa: può essere annullato -->
+                            <form
+                                class="status-form"
+                                method="post"
+                                action="{% url 'professional-update-appointment-status' appointment.id %}"
+                            >
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="cancel">
+                                <button class="button danger" type="submit">
+                                    Annulla
+                                </button>
+                            </form>
+                        {% endif %}
+
+                        {% if appointment.status == "pending" and appointment.is_past %}
+                            <!-- Appuntamento passato ancora in attesa: meglio permettere solo annullamento -->
+                            <form
+                                class="status-form"
+                                method="post"
+                                action="{% url 'professional-update-appointment-status' appointment.id %}"
+                            >
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="cancel">
+                                <button class="button danger" type="submit">
+                                    Annulla
+                                </button>
+                            </form>
+                        {% endif %}
+
+                        {% if appointment.status == "confirmed" %}
+                            <!-- Appuntamento confermato: può essere completato -->
+                            <form
+                                class="status-form"
+                                method="post"
+                                action="{% url 'professional-update-appointment-status' appointment.id %}"
+                            >
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="complete">
+                                <button class="button success" type="submit">
+                                    Completa
+                                </button>
+                            </form>
+
+                            <!-- Appuntamento confermato: può essere ancora annullato -->
+                            <form
+                                class="status-form"
+                                method="post"
+                                action="{% url 'professional-update-appointment-status' appointment.id %}"
+                            >
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="cancel">
+                                <button class="button danger" type="submit">
+                                    Annulla
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </article>
             {% endfor %}
         </div>

@@ -224,3 +224,40 @@ def appointment_cancel(request, pk):
         appointment.save()
 
     return redirect("customer-dashboard")
+
+@login_required
+@permission_required("core.can_manage_appointments", raise_exception=True)
+@require_POST
+def professional_update_appointment_status(request, pk):
+    # Recupera solo appuntamenti assegnati al professionista autenticato.
+    appointment = get_object_or_404(
+        Appointment,
+        pk=pk,
+        operator=request.user,
+    )
+
+    # Azione scelta dal pulsante premuto nella dashboard professionista.
+    action = request.POST.get("action")
+
+    # Un appuntamento in attesa può essere confermato solo se non è passato.
+    # Può invece essere annullato anche se è già passato.
+    if appointment.status == Appointment.STATUS_PENDING:
+        if action == "confirm" and not appointment.is_past:
+            appointment.status = Appointment.STATUS_CONFIRMED
+            appointment.save()
+
+        elif action == "cancel":
+            appointment.status = Appointment.STATUS_CANCELLED
+            appointment.save()
+
+    # Un appuntamento confermato può essere completato o annullato.
+    elif appointment.status == Appointment.STATUS_CONFIRMED:
+        if action == "complete":
+            appointment.status = Appointment.STATUS_COMPLETED
+            appointment.save()
+
+        elif action == "cancel":
+            appointment.status = Appointment.STATUS_CANCELLED
+            appointment.save()
+
+    return redirect("professional-dashboard")

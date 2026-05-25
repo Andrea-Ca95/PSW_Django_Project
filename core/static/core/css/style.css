@@ -643,3 +643,19 @@ body {
         align-items: flex-start;
     }
 }
+/* Form per aggiornare lo stato appuntamento */
+.status-form {
+    margin: 0;
+}
+
+/* Pulsante per azioni positive */
+.button.success {
+    border: none;
+    background: #dcfce7;
+    color: #166534;
+    cursor: pointer;
+}
+
+.button.success:hover {
+    background: #bbf7d0;
+}

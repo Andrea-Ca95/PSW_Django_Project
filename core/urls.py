@@ -23,6 +23,10 @@ urlpatterns = [
     # Annullamento prenotazione da parte del cliente.
     path("appuntamenti/<int:pk>/annulla/",views.appointment_cancel,name="appointment-cancel",),
 
+    # Aggiornamento stato appuntamento da parte del professionista.
+    path(
+    "appuntamenti/<int:pk>/aggiorna-stato/",views.professional_update_appointment_status, name="professional-update-appointment-status",),
+
     # Registrazione pubblica per nuovi clienti.
     path("registrazione/", views.customer_signup, name="signup"),
 
