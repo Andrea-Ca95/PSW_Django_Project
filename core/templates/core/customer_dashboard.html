@@ -37,6 +37,8 @@
                                 class="cancel-form"
                                 method="post"
                                 action="{% url 'appointment-cancel' appointment.id %}"
+                                data-confirm="Vuoi davvero annullare questa prenotazione?"
+
                             >
                                 {% csrf_token %}
                                 <button class="button danger" type="submit">

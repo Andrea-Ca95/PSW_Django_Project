@@ -46,6 +46,8 @@
                                 class="status-form"
                                 method="post"
                                 action="{% url 'professional-update-appointment-status' appointment.id %}"
+                                data-confirm="Vuoi confermare questo appuntamento?"
+
                             >
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="confirm">
@@ -59,6 +61,8 @@
                                 class="status-form"
                                 method="post"
                                 action="{% url 'professional-update-appointment-status' appointment.id %}"
+                                data-confirm="Vuoi davvero annullare questo appuntamento?"
+>
                             >
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="cancel">
@@ -74,6 +78,8 @@
                                 class="status-form"
                                 method="post"
                                 action="{% url 'professional-update-appointment-status' appointment.id %}"
+                                data-confirm="Vuoi davvero annullare questo appuntamento?"
+>
                             >
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="cancel">
@@ -89,6 +95,7 @@
                                 class="status-form"
                                 method="post"
                                 action="{% url 'professional-update-appointment-status' appointment.id %}"
+                                data-confirm="Vuoi segnare questo appuntamento come completato?"
                             >
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="complete">
@@ -102,6 +109,7 @@
                                 class="status-form"
                                 method="post"
                                 action="{% url 'professional-update-appointment-status' appointment.id %}"
+                                data-confirm="Vuoi davvero annullare questo appuntamento?"
                             >
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="cancel">
