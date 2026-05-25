@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import AppointmentCreateForm, CustomerSignUpForm
 from .models import (
@@ -205,3 +206,21 @@ def appointment_create(request, service_pk):
     }
 
     return render(request, "core/appointment_form.html", context)
+
+@login_required
+@permission_required("core.can_access_customer_area", raise_exception=True)
+@require_POST
+def appointment_cancel(request, pk):
+    # Recupera solo appuntamenti appartenenti al cliente autenticato.
+    appointment = get_object_or_404(
+        Appointment,
+        pk=pk,
+        customer=request.user,
+    )
+
+    # Il cliente può annullare solo appuntamenti ancora gestibili.
+    if appointment.can_be_cancelled_by_customer():
+        appointment.status = Appointment.STATUS_CANCELLED
+        appointment.save()
+
+    return redirect("customer-dashboard")

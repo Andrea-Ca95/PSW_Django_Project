@@ -20,6 +20,9 @@ urlpatterns = [
     views.appointment_create,
     name="appointment-create",),
 
+    # Annullamento prenotazione da parte del cliente.
+    path("appuntamenti/<int:pk>/annulla/",views.appointment_cancel,name="appointment-cancel",),
+
     # Registrazione pubblica per nuovi clienti.
     path("registrazione/", views.customer_signup, name="signup"),
 

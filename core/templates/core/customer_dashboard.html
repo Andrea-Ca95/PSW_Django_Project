@@ -16,6 +16,7 @@
         <div class="appointment-list">
             {% for appointment in appointments %}
                 <article class="appointment-row">
+                    <!-- Dati principali della prenotazione -->
                     <div>
                         <h3>{{ appointment.service.name }}</h3>
                         <p>
@@ -24,9 +25,26 @@
                         </p>
                     </div>
 
-                    <span class="status-badge">
-                        {{ appointment.get_status_display }}
-                    </span>
+                    <!-- Stato e azioni disponibili per il cliente -->
+                    <div class="appointment-side">
+                        <span class="status-badge">
+                            {{ appointment.get_status_display }}
+                        </span>
+
+                        {% if appointment.can_be_cancelled_by_customer %}
+                            <!-- Annullamento via POST: modifica lo stato senza usare link GET -->
+                            <form
+                                class="cancel-form"
+                                method="post"
+                                action="{% url 'appointment-cancel' appointment.id %}"
+                            >
+                                {% csrf_token %}
+                                <button class="button danger" type="submit">
+                                    Annulla
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </article>
             {% endfor %}
         </div>
