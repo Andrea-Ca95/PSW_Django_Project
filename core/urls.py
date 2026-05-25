@@ -14,6 +14,12 @@ urlpatterns = [
     # Dettaglio pubblico di un singolo servizio.
     path("servizi/<int:pk>/", views.service_detail, name="service-detail"),
 
+    # Creazione appuntamento per un servizio selezionato.
+    path(
+    "servizi/<int:service_pk>/prenota/",
+    views.appointment_create,
+    name="appointment-create",),
+
     # Registrazione pubblica per nuovi clienti.
     path("registrazione/", views.customer_signup, name="signup"),
 

@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+
+{% block title %}Prenota appuntamento - Appunto{% endblock %}
+
+{% block content %}
+<section class="auth-card wide-card">
+    <a class="back-link" href="{{ service.get_absolute_url }}">← Torna al servizio</a>
+
+    <h1>Prenota appuntamento</h1>
+
+    <p>
+        Stai prenotando il servizio:
+        <strong>{{ service.name }}</strong>
+    </p>
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        <!-- Errori generali della form -->
+        {% if form.non_field_errors %}
+            <div class="form-alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Campi del form di prenotazione -->
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button class="button primary" type="submit">Conferma prenotazione</button>
+    </form>
+</section>
+{% endblock %}

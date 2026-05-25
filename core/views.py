@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import CustomerSignUpForm
+from .forms import AppointmentCreateForm, CustomerSignUpForm
 from .models import (
     Appointment,
     CustomerProfile,
@@ -172,3 +172,36 @@ def professional_dashboard(request):
     }
 
     return render(request, "core/professional_dashboard.html", context)
+
+@login_required
+@permission_required("core.can_access_customer_area", raise_exception=True)
+def appointment_create(request, service_pk):
+    # Recupera il servizio da prenotare solo se è attivo.
+    service = get_object_or_404(Service, pk=service_pk, is_active=True)
+
+    if request.method == "POST":
+        # Form compilata dal cliente.
+        form = AppointmentCreateForm(request.POST, service=service)
+
+        if form.is_valid():
+            appointment = form.save(commit=False)
+
+            # Il cliente è sempre l'utente autenticato.
+            appointment.customer = request.user
+
+            # Il servizio arriva dall'URL, non dal form.
+            appointment.service = service
+
+            appointment.save()
+
+            return redirect("customer-dashboard")
+    else:
+        # Primo caricamento: form vuota filtrata sul servizio scelto.
+        form = AppointmentCreateForm(service=service)
+
+    context = {
+        "form": form,
+        "service": service,
+    }
+
+    return render(request, "core/appointment_form.html", context)

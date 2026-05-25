@@ -44,8 +44,8 @@
             </div>
         </div>
 
-        <!-- Link temporaneo: verrà collegato al form di prenotazione -->
-        <a class="button primary detail-action" href="#">Prenota questo servizio</a>
+       <!-- Porta il cliente alla form di prenotazione per questo servizio -->
+    <a class="button primary detail-action" href="{% url 'appointment-create' service.id %}">Prenota questo servizio</a>
     </article>
 
     <aside class="detail-side-card">

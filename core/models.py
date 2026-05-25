@@ -180,8 +180,10 @@ class Appointment(models.Model):
                 })
 
         # Un servizio disattivato non deve essere prenotabile.
-        if self.service and not self.service.is_active:
-            raise ValidationError({
+        # Controlliamo prima service_id perché durante la validazione del form
+        # il servizio può non essere ancora assegnato all'istanza.
+            if self.service_id and not self.service.is_active:
+                raise ValidationError({
                 "service": "Questo servizio non è attualmente prenotabile."
             })
 

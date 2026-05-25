@@ -19,7 +19,7 @@
                     <div>
                         <h3>{{ appointment.service.name }}</h3>
                         <p>
-                            {{ appointment.date }} alle {{ appointment.start_time }}
+                            {{ appointment.date|date:"d/m/Y" }} alle {{ appointment.start_time|time:"H:i" }}
                             con {{ appointment.operator.get_full_name|default:appointment.operator.username }}
                         </p>
                     </div>
