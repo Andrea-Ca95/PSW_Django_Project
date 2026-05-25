@@ -13,4 +13,17 @@ urlpatterns = [
 
     # Dettaglio pubblico di un singolo servizio.
     path("servizi/<int:pk>/", views.service_detail, name="service-detail"),
+
+    # Registrazione pubblica per nuovi clienti.
+    path("registrazione/", views.customer_signup, name="signup"),
+
+    # Area riservata ai clienti.
+    path("area-cliente/", views.customer_dashboard, name="customer-dashboard"),
+
+    # Area riservata ai professionisti.
+    path(
+        "area-professionista/",
+        views.professional_dashboard,
+        name="professional-dashboard",
+    ),
 ]

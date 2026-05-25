@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+
+{% block title %}Area cliente - Appunto{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Area riservata</p>
+    <h1>Area cliente</h1>
+    <p>Qui puoi controllare gli appuntamenti collegati al tuo account.</p>
+</section>
+
+<section class="dashboard-card">
+    <h2>Le mie prenotazioni</h2>
+
+    {% if appointments %}
+        <div class="appointment-list">
+            {% for appointment in appointments %}
+                <article class="appointment-row">
+                    <div>
+                        <h3>{{ appointment.service.name }}</h3>
+                        <p>
+                            {{ appointment.date }} alle {{ appointment.start_time }}
+                            con {{ appointment.operator.get_full_name|default:appointment.operator.username }}
+                        </p>
+                    </div>
+
+                    <span class="status-badge">
+                        {{ appointment.get_status_display }}
+                    </span>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>Nessuna prenotazione</h2>
+            <p>Non hai ancora appuntamenti registrati.</p>
+            <a class="button primary" href="{% url 'service-list' %}">Consulta i servizi</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block title %}Accesso negato - Appunto{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Accesso negato</h1>
+    <p>Non hai i permessi necessari per visualizzare questa pagina.</p>
+
+    <!-- Link di rientro alla home dopo un accesso non autorizzato -->
+    <a class="button primary" href="{% url 'index' %}">Torna alla home</a>
+</section>
+{% endblock %}

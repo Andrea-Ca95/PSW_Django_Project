@@ -7,6 +7,9 @@ urlpatterns = [
     # Pannello amministrativo di Django.
     path("admin/", admin.site.urls),
 
-    # Tutte le pagine pubbliche e interne dell'app core.
+    # URL standard Django per login, logout e gestione password.
+    path("accounts/", include("django.contrib.auth.urls")),
+
+    # URL dell'app principale.
     path("", include("core.urls")),
 ]

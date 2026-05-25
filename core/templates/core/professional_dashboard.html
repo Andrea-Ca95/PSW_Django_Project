@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+
+{% block title %}Area professionista - Appunto{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Area riservata</p>
+    <h1>Area professionista</h1>
+    <p>Qui puoi visualizzare gli appuntamenti assegnati al tuo profilo.</p>
+</section>
+
+<section class="dashboard-card">
+    <h2>Appuntamenti assegnati</h2>
+
+    {% if appointments %}
+        <div class="appointment-list">
+            {% for appointment in appointments %}
+                <article class="appointment-row">
+                    <div>
+                        <h3>{{ appointment.service.name }}</h3>
+                        <p>
+                            Cliente:
+                            {{ appointment.customer.get_full_name|default:appointment.customer.username }}
+                        </p>
+                        <p>
+                            Data: {{ appointment.date }} alle {{ appointment.start_time }}
+                        </p>
+                    </div>
+
+                    <span class="status-badge">
+                        {{ appointment.get_status_display }}
+                    </span>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>Nessun appuntamento assegnato</h2>
+            <p>Al momento non risultano appuntamenti collegati al tuo profilo.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

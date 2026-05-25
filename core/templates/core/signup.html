@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+
+{% block title %}Registrazione - Appunto{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Registrazione cliente</h1>
+    <p>Crea un account cliente per prenotare i servizi dello studio.</p>
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        <!-- Errori generali della form -->
+        {% if form.non_field_errors %}
+            <div class="form-alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Campi della registrazione cliente -->
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button class="button primary" type="submit">Registrati</button>
+    </form>
+
+    <p class="auth-link">
+        Hai già un account?
+        <a href="{% url 'login' %}">Accedi</a>
+    </p>
+</section>
+{% endblock %}

@@ -1,8 +1,18 @@
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Appointment, ProfessionalProfile, Service, ServiceCategory
+from .forms import CustomerSignUpForm
+from .models import (
+    Appointment,
+    CustomerProfile,
+    ProfessionalProfile,
+    Service,
+    ServiceCategory,
+)
 
 
 def index(request):
@@ -90,3 +100,75 @@ def service_detail(request, pk):
     }
 
     return render(request, "core/service_detail.html", context)
+
+
+def customer_signup(request):
+    # Se l'utente è già autenticato, non ha senso mostrare la registrazione.
+    if request.user.is_authenticated:
+        return redirect("index")
+
+    if request.method == "POST":
+        # Form compilata dall'utente.
+        form = CustomerSignUpForm(request.POST)
+
+        if form.is_valid():
+            # Salva l'utente Django.
+            user = form.save(commit=False)
+            user.email = form.cleaned_data["email"]
+            user.first_name = form.cleaned_data["first_name"]
+            user.last_name = form.cleaned_data["last_name"]
+            user.save()
+
+            # Associa il nuovo utente al gruppo Cliente.
+            customer_group, _ = Group.objects.get_or_create(name="Cliente")
+            user.groups.add(customer_group)
+
+            # Crea il profilo cliente collegato all'utente.
+            CustomerProfile.objects.create(
+                user=user,
+                phone=form.cleaned_data["phone"],
+            )
+
+            # Dopo la registrazione l'utente viene autenticato automaticamente.
+            login(request, user)
+
+            return redirect("customer-dashboard")
+    else:
+        # Primo caricamento della pagina: form vuota.
+        form = CustomerSignUpForm()
+
+    return render(request, "core/signup.html", {"form": form})
+
+
+@login_required
+@permission_required("core.can_access_customer_area", raise_exception=True)
+def customer_dashboard(request):
+    # Mostra solo gli appuntamenti del cliente autenticato.
+    appointments = (
+        Appointment.objects.filter(customer=request.user)
+        .select_related("service", "operator")
+        .order_by("date", "start_time")
+    )
+
+    context = {
+        "appointments": appointments,
+    }
+
+    return render(request, "core/customer_dashboard.html", context)
+
+
+@login_required
+@permission_required("core.can_access_professional_area", raise_exception=True)
+def professional_dashboard(request):
+    # Mostra solo gli appuntamenti assegnati al professionista autenticato.
+    appointments = (
+        Appointment.objects.filter(operator=request.user)
+        .select_related("service", "customer")
+        .order_by("date", "start_time")
+    )
+
+    context = {
+        "appointments": appointments,
+    }
+
+    return render(request, "core/professional_dashboard.html", context)

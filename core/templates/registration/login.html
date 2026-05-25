@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+
+{% block title %}Login - Appunto{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Accedi</h1>
+    <p>Inserisci le credenziali per accedere alla tua area personale.</p>
+
+    {% if form.errors %}
+        <div class="form-alert">
+            Username o password non corretti.
+        </div>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        <!-- Campo username gestito dalla form di autenticazione Django -->
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+        </div>
+
+        <!-- Campo password gestito dalla form di autenticazione Django -->
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+        </div>
+
+        <button class="button primary" type="submit">Accedi</button>
+    </form>
+
+    <p class="auth-link">
+        Non hai un account?
+        <a href="{% url 'signup' %}">Registrati come cliente</a>
+    </p>
+</section>
+{% endblock %}
