@@ -1,0 +1,114 @@
+{% extends "core/base.html" %}
+
+{% block title %}Area gestione - Appunto{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Area amministrativa</p>
+    <h1>Area gestione</h1>
+    <p>
+        Riepilogo operativo dei servizi, degli utenti e degli appuntamenti presenti
+        nella piattaforma.
+    </p>
+</section>
+
+<section class="stats-grid">
+    <!-- Dati sintetici sui servizi -->
+    <article class="stat-card">
+        <span>Servizi totali</span>
+        <strong>{{ total_services }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Servizi attivi</span>
+        <strong>{{ active_services }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Clienti registrati</span>
+        <strong>{{ total_customers }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Professionisti</span>
+        <strong>{{ total_professionals }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>In attesa</span>
+        <strong>{{ pending_appointments }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Confermati</span>
+        <strong>{{ confirmed_appointments }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Annullati</span>
+        <strong>{{ cancelled_appointments }}</strong>
+    </article>
+
+    <article class="stat-card">
+        <span>Completati</span>
+        <strong>{{ completed_appointments }}</strong>
+    </article>
+</section>
+
+<section class="dashboard-card admin-dashboard-card">
+    <h2>Ultimi appuntamenti inseriti</h2>
+
+    {% if recent_appointments %}
+        <div class="appointment-list">
+            {% for appointment in recent_appointments %}
+                <article class="appointment-row">
+                    <!-- Dati principali dell'appuntamento -->
+                    <div>
+                        <h3>{{ appointment.service.name }}</h3>
+
+                        <p>
+                            Cliente:
+                            {{ appointment.customer.get_full_name|default:appointment.customer.username }}
+                        </p>
+
+                        <p>
+                            Professionista:
+                            {{ appointment.operator.get_full_name|default:appointment.operator.username }}
+                        </p>
+
+                        <p>
+                            Data:
+                            {{ appointment.date|date:"d/m/Y" }}
+                            alle
+                            {{ appointment.start_time|time:"H:i" }}
+                        </p>
+                    </div>
+
+                    <!-- Stato corrente dell'appuntamento -->
+                    <div class="appointment-side">
+                        <span class="status-badge">
+                            {{ appointment.get_status_display }}
+                        </span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>Nessun appuntamento presente</h2>
+            <p>Non sono ancora stati registrati appuntamenti.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="dashboard-card admin-links-card">
+    <h2>Gestione completa</h2>
+    <p>
+        Per modificare servizi, categorie, profili, utenti e appuntamenti usare
+        il pannello amministrativo Django.
+    </p>
+
+    <!-- Link rapido al pannello admin Django -->
+    <a class="button primary" href="/admin/">Apri pannello admin</a>
+</section>
+{% endblock %}

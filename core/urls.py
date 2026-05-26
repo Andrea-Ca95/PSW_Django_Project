@@ -39,4 +39,7 @@ urlpatterns = [
         views.professional_dashboard,
         name="professional-dashboard",
     ),
+
+    # Area gestione riservata agli amministratori.
+path("area-gestione/", views.admin_dashboard, name="admin-dashboard"),
 ]

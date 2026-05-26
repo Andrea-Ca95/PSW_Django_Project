@@ -5,19 +5,19 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- Titolo modificabile dai template figli -->
+    <!-- Titolo -->
     <title>{% block title %}Appunto{% endblock %}</title>
 
     <!-- Layout responsive anche su schermi piccoli -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS principale del progetto -->
+    <!-- CSS principale -->
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
-    <!-- Favicon del progetto -->
+    <!-- Favicon -->
     <link rel="icon" href="{% static 'core/favicon.svg' %}" type="image/svg+xml">
 
-    <!-- JavaScript principale del progetto -->
+    <!-- JavaScript -->
     <script src="{% static 'core/js/main.js' %}" defer></script>
 </head>
 <body>
@@ -26,25 +26,30 @@
             <!-- Logo con link alla home -->
             <a class="logo" href="{% url 'index' %}">Appunto</a>
 
-            <nav class="main-nav">
+ <nav class="main-nav">
     <a href="{% url 'index' %}">Home</a>
     <a href="{% url 'service-list' %}">Servizi</a>
 
-    <!-- Link visibile solo agli utenti con permesso cliente -->
-    {% if perms.core.can_access_customer_area %}
-        <a href="{% url 'customer-dashboard' %}">Area cliente</a>
-    {% endif %}
+<!-- Link visibile solo ai clienti non amministratori -->
+{% if perms.core.can_access_customer_area and not perms.core.change_service %}
+    <a href="{% url 'customer-dashboard' %}">Area cliente</a>
+{% endif %}
 
-    <!-- Link visibile solo agli utenti con permesso professionista -->
-    {% if perms.core.can_access_professional_area %}
-        <a href="{% url 'professional-dashboard' %}">Area professionista</a>
-    {% endif %}
+<!-- Link visibile solo ai professionisti non amministratori -->
+{% if perms.core.can_access_professional_area and not perms.core.change_service %}
+    <a href="{% url 'professional-dashboard' %}">Area professionista</a>
+{% endif %}
+
+<!-- Link visibile solo agli utenti con permesso amministrativo sui servizi -->
+{% if perms.core.change_service %}
+    <a href="{% url 'admin-dashboard' %}">Area gestione</a>
+{% endif %}
 
     {% if user.is_authenticated %}
         <!-- Nome utente visibile quando l'utente è autenticato -->
         <span class="nav-user">Utente: {{ user.get_username }}</span>
 
-        <!-- Django 5 richiede POST per il logout -->
+        <!-- POST per il logout -->
         <form class="logout-form" method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit">Logout</button>

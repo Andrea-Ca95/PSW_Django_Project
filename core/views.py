@@ -40,7 +40,6 @@ def index(request):
 
 def service_list(request):
     # Parametri letti dalla query string.
-    # Esempio: /servizi/?q=documenti&category=1
     query = request.GET.get("q", "").strip()
     selected_category = request.GET.get("category", "").strip()
 
@@ -261,3 +260,49 @@ def professional_update_appointment_status(request, pk):
             appointment.save()
 
     return redirect("professional-dashboard")
+
+@login_required
+@permission_required("core.change_service", raise_exception=True)
+def admin_dashboard(request):
+    # Area gestionale visibile solo agli utenti con permesso di modifica servizi.
+
+    total_services = Service.objects.count()
+    active_services = Service.objects.filter(is_active=True).count()
+    total_customers = CustomerProfile.objects.count()
+    total_professionals = ProfessionalProfile.objects.count()
+
+    pending_appointments = Appointment.objects.filter(
+        status=Appointment.STATUS_PENDING
+    ).count()
+
+    confirmed_appointments = Appointment.objects.filter(
+        status=Appointment.STATUS_CONFIRMED
+    ).count()
+
+    cancelled_appointments = Appointment.objects.filter(
+        status=Appointment.STATUS_CANCELLED
+    ).count()
+
+    completed_appointments = Appointment.objects.filter(
+        status=Appointment.STATUS_COMPLETED
+    ).count()
+
+    # Ultimi appuntamenti inseriti, utili per un riepilogo rapido.
+    recent_appointments = (
+        Appointment.objects.select_related("service", "customer", "operator")
+        .order_by("-created_at")[:5]
+    )
+
+    context = {
+        "total_services": total_services,
+        "active_services": active_services,
+        "total_customers": total_customers,
+        "total_professionals": total_professionals,
+        "pending_appointments": pending_appointments,
+        "confirmed_appointments": confirmed_appointments,
+        "cancelled_appointments": cancelled_appointments,
+        "completed_appointments": completed_appointments,
+        "recent_appointments": recent_appointments,
+    }
+
+    return render(request, "core/admin_dashboard.html", context)

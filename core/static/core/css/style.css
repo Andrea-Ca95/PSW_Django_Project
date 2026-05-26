@@ -666,3 +666,26 @@ body {
     font-size: 0.85rem;
     margin-top: -8px;
 }
+
+/* Spaziatura aggiuntiva per l'area gestione */
+.admin-dashboard-card,
+.admin-links-card {
+    margin-top: 32px;
+}
+
+/* Permette alla griglia statistiche di adattarsi meglio nell'area admin */
+.stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 900px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
