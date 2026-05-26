@@ -2,7 +2,7 @@
 
 **Appunto** è una web app sviluppata con Django per la gestione di servizi e appuntamenti presso uno studio professionale generico non medico.
 
-Il progetto è stato realizzato per l’esame di **Progettazione e Sviluppo Web** e utilizza Django, Python, HTML, CSS, JavaScript e SQLite in ambiente locale.
+Il progetto utilizza Django, Python, HTML, CSS, JavaScript e SQLite in ambiente locale.
 
 ---
 
@@ -80,15 +80,25 @@ Il cliente può:
 - Area riservata cliente.
 - Area riservata professionista.
 - Pagina 403 personalizzata per accessi non autorizzati.
+- Creazione prenotazione tramite form.
+- Filtro dei professionisti in base al servizio scelto.
+- Annullamento prenotazione da parte del cliente.
+- Gestione stato appuntamento da parte del professionista.
+- Conferma, completamento e annullamento appuntamenti.
+- Validazione su date, orari, servizi attivi e disponibilità del professionista.
+- JavaScript lato client per:
+  - data minima nei campi data;
+  - contatore caratteri nel campo note;
+  - conferme prima delle azioni sugli appuntamenti.
+- Favicon SVG personalizzata.
+- Test automatici principali.
 - Django Admin personalizzata con:
   - liste personalizzate;
   - filtri;
   - campi di ricerca;
   - fieldsets;
   - azioni sugli appuntamenti.
-- Comando custom per creare dati demo iniziali.
-
----
+- Comando custom per creare gruppi, utenti demo, servizi e appuntamenti iniziali.
 
 ## Modelli principali
 

@@ -1,0 +1,6 @@
+<!-- Icona semplice del progetto Appunto -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+    <rect width="64" height="64" rx="14" fill="#1f2937"/>
+    <path d="M20 44L27 20H38L45 44H38L36.5 38H28.5L27 44H20Z" fill="#ffffff"/>
+    <path d="M30 32H35L32.5 24L30 32Z" fill="#2563eb"/>
+</svg>
