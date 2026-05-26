@@ -22,3 +22,8 @@ media/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# File di consegna non pubblici
+CREDENZIALI_UTENTI.txt
+MEMBRI_GRUPPO.txt
+database_dump.json
