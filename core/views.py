@@ -185,32 +185,55 @@ def customer_signup(request):
 @login_required
 @permission_required("core.can_access_customer_area", raise_exception=True)
 def customer_dashboard(request):
-    # Mostra solo gli appuntamenti del cliente autenticato.
-    appointments = (
-        Appointment.objects.filter(customer=request.user)
-        .select_related("service", "operator")
-        .order_by("date", "start_time")
-    )
+    # Prenotazioni ancora rilevanti per il cliente.
+    active_appointments = Appointment.objects.filter(
+        customer=request.user,
+        status__in=[
+            Appointment.STATUS_PENDING,
+            Appointment.STATUS_CONFIRMED,
+        ],
+    ).select_related("service", "operator").order_by("date", "start_time")
+
+    # Storico delle prenotazioni concluse o annullate.
+    history_appointments = Appointment.objects.filter(
+        customer=request.user,
+        status__in=[
+            Appointment.STATUS_CANCELLED,
+            Appointment.STATUS_COMPLETED,
+        ],
+    ).select_related("service", "operator").order_by("-date", "-start_time")
 
     context = {
-        "appointments": appointments,
+        "active_appointments": active_appointments,
+        "history_appointments": history_appointments,
     }
 
     return render(request, "core/customer_dashboard.html", context)
 
-
 @login_required
 @permission_required("core.can_access_professional_area", raise_exception=True)
 def professional_dashboard(request):
-    # Mostra solo gli appuntamenti assegnati al professionista autenticato.
-    appointments = (
-        Appointment.objects.filter(operator=request.user)
-        .select_related("service", "customer")
-        .order_by("date", "start_time")
-    )
+    # Appuntamenti ancora da gestire dal professionista.
+    active_appointments = Appointment.objects.filter(
+        operator=request.user,
+        status__in=[
+            Appointment.STATUS_PENDING,
+            Appointment.STATUS_CONFIRMED,
+        ],
+    ).select_related("service", "customer").order_by("date", "start_time")
+
+    # Storico degli appuntamenti già conclusi o annullati.
+    history_appointments = Appointment.objects.filter(
+        operator=request.user,
+        status__in=[
+            Appointment.STATUS_CANCELLED,
+            Appointment.STATUS_COMPLETED,
+        ],
+    ).select_related("service", "customer").order_by("-date", "-start_time")
 
     context = {
-        "appointments": appointments,
+        "active_appointments": active_appointments,
+        "history_appointments": history_appointments,
     }
 
     return render(request, "core/professional_dashboard.html", context)

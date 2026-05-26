@@ -10,11 +10,11 @@
 </section>
 
 <section class="dashboard-card">
-    <h2>Appuntamenti assegnati</h2>
+    <h2>Appuntamenti da gestire</h2>
 
-    {% if appointments %}
+    {% if active_appointments %}
         <div class="appointment-list">
-            {% for appointment in appointments %}
+            {% for appointment in active_appointments %}
                 <article class="appointment-row">
                     <!-- Dati principali dell'appuntamento -->
                     <div>
@@ -36,7 +36,7 @@
 
                     <!-- Stato e azioni disponibili per il professionista -->
                     <div class="appointment-side">
-                        <span class="status-badge">
+                        <span class="status-badge status-{{ appointment.status }}">
                             {{ appointment.get_status_display }}
                         </span>
 
@@ -71,7 +71,7 @@
                         {% endif %}
 
                         {% if appointment.status == "pending" and appointment.is_past %}
-                            <!-- Appuntamento passato ancora in attesa: meglio permettere solo annullamento -->
+                            <!-- Appuntamento passato ancora in attesa: può solo essere annullato -->
                             <form
                                 class="status-form"
                                 method="post"
@@ -121,8 +121,50 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <h2>Nessun appuntamento assegnato</h2>
-            <p>Al momento non risultano appuntamenti collegati al tuo profilo.</p>
+            <h3>Nessun appuntamento da gestire</h3>
+            <p>Non ci sono appuntamenti in attesa o confermati.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="dashboard-card dashboard-history-card">
+    <h2>Storico appuntamenti</h2>
+
+    {% if history_appointments %}
+        <div class="appointment-list">
+            {% for appointment in history_appointments %}
+                <article class="appointment-row">
+                    <!-- Dati principali dell'appuntamento storico -->
+                    <div>
+                        <h3>{{ appointment.service.name }}</h3>
+
+                        <p>
+                            Cliente:
+                            {{ appointment.customer.get_full_name|default:appointment.customer.username }}
+                        </p>
+
+                        <p>
+                            Data: {{ appointment.date|date:"d/m/Y" }} alle {{ appointment.start_time|time:"H:i" }}
+                        </p>
+
+                        {% if appointment.notes %}
+                            <p>Note: {{ appointment.notes }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Stato finale dell'appuntamento -->
+                    <div class="appointment-side">
+                        <span class="status-badge status-{{ appointment.status }}">
+                            {{ appointment.get_status_display }}
+                        </span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>Nessuno storico disponibile</h3>
+            <p>Non ci sono ancora appuntamenti completati o annullati.</p>
         </div>
     {% endif %}
 </section>

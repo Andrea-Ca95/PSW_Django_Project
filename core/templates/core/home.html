@@ -9,9 +9,8 @@
         <h1>Gestisci appuntamenti e servizi con Appunto</h1>
 
         <p>
-            Appunto è una web app per prenotare servizi presso uno studio professionale
-            non medico. I clienti possono consultare i servizi disponibili e richiedere
-            appuntamenti con i professionisti dello studio.
+            Consulta i servizi disponibili, scegli un professionista e gestisci
+            le tue prenotazioni in modo semplice.
         </p>
 
         <div class="hero-actions">
@@ -34,17 +33,14 @@
                 <a class="button secondary" href="{% url 'login' %}">Accedi</a>
             {% endif %}
         </div>
+
+        <!-- Contatore visite gestito tramite sessione Django -->
+        <p class="session-note">
+            Accessi a questa home nella sessione corrente: <strong>{{ num_visits }}</strong>
+        </p>
+
     </div>
 
-    <div class="info-card">
-        <h2>Area progetto PSW</h2>
-        <p>Questa home usa template Django, CSS statico e sessione tramite cookie.</p>
-
-        <div class="session-box">
-            <span>Visite in questa sessione</span>
-            <strong>{{ num_visits }}</strong>
-        </div>
-    </div>
 </section>
 
 {% if user.is_authenticated and perms.core.change_service %}
@@ -75,7 +71,7 @@
     <!-- Home sintetica per professionisti -->
     <section class="stats-grid">
         <article class="stat-card">
-            <span>Appuntamenti assegnati</span>
+            <span>Totale appuntamenti</span>
             <strong>{{ professional_total_appointments }}</strong>
         </article>
 

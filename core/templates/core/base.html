@@ -46,8 +46,17 @@
 {% endif %}
 
     {% if user.is_authenticated %}
-        <!-- Nome utente visibile quando l'utente è autenticato -->
-        <span class="nav-user">Utente: {{ user.get_username }}</span>
+       <!-- Nome mostrato in navbar in base al ruolo dell'utente -->
+        <span class="nav-user">
+            Utente:
+            {{ user.first_name|default:user.get_username }}
+
+            {% if perms.core.change_service %}
+                (adm)
+            {% elif perms.core.can_access_professional_area %}
+                (pro)
+            {% endif %}
+        </span>
 
         <!-- POST per il logout -->
         <form class="logout-form" method="post" action="{% url 'logout' %}">

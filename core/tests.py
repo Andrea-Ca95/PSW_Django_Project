@@ -103,7 +103,8 @@ class PublicPagesTests(AppuntoBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Appunto")
-        self.assertContains(response, "Visite in questa sessione")
+        # Controlla che il contatore visite salvato in sessione sia visibile nella home.
+        self.assertContains(response, "Accessi a questa home nella sessione corrente")
 
     def test_service_list_loads(self):
         # La lista servizi deve mostrare i servizi attivi.

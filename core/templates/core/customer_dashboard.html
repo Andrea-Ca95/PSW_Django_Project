@@ -10,11 +10,11 @@
 </section>
 
 <section class="dashboard-card">
-    <h2>Le mie prenotazioni</h2>
+    <h2>Prenotazioni attive</h2>
 
-    {% if appointments %}
+    {% if active_appointments %}
         <div class="appointment-list">
-            {% for appointment in appointments %}
+            {% for appointment in active_appointments %}
                 <article class="appointment-row">
                     <!-- Dati principali della prenotazione -->
                     <div>
@@ -27,7 +27,7 @@
 
                     <!-- Stato e azioni disponibili per il cliente -->
                     <div class="appointment-side">
-                        <span class="status-badge">
+                        <span class="status-badge status-{{ appointment.status }}">
                             {{ appointment.get_status_display }}
                         </span>
 
@@ -38,7 +38,6 @@
                                 method="post"
                                 action="{% url 'appointment-cancel' appointment.id %}"
                                 data-confirm="Vuoi davvero annullare questa prenotazione?"
-
                             >
                                 {% csrf_token %}
                                 <button class="button danger" type="submit">
@@ -52,9 +51,42 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <h2>Nessuna prenotazione</h2>
-            <p>Non hai ancora appuntamenti registrati.</p>
+            <h3>Nessuna prenotazione attiva</h3>
+            <p>Non hai appuntamenti in attesa o confermati.</p>
             <a class="button primary" href="{% url 'service-list' %}">Consulta i servizi</a>
+        </div>
+    {% endif %}
+</section>
+
+<section class="dashboard-card dashboard-history-card">
+    <h2>Storico prenotazioni</h2>
+
+    {% if history_appointments %}
+        <div class="appointment-list">
+            {% for appointment in history_appointments %}
+                <article class="appointment-row">
+                    <!-- Dati principali della prenotazione storica -->
+                    <div>
+                        <h3>{{ appointment.service.name }}</h3>
+                        <p>
+                            {{ appointment.date|date:"d/m/Y" }} alle {{ appointment.start_time|time:"H:i" }}
+                            con {{ appointment.operator.get_full_name|default:appointment.operator.username }}
+                        </p>
+                    </div>
+
+                    <!-- Stato finale della prenotazione -->
+                    <div class="appointment-side">
+                        <span class="status-badge status-{{ appointment.status }}">
+                            {{ appointment.get_status_display }}
+                        </span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>Nessuno storico disponibile</h3>
+            <p>Non ci sono ancora prenotazioni concluse o annullate.</p>
         </div>
     {% endif %}
 </section>
