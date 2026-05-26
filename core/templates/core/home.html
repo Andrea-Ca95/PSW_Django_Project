@@ -3,10 +3,9 @@
 {% block title %}Home - Appunto{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div class="hero-text">
+<section class="hero-grid">
+    <div class="hero-card">
         <p class="eyebrow">Studio professionale generico</p>
-
         <h1>Gestisci appuntamenti e servizi con Appunto</h1>
 
         <p>
@@ -16,71 +15,175 @@
         </p>
 
         <div class="hero-actions">
-            <!-- Link temporanei: verranno collegati quando creeremo servizi e login -->
+            <!-- Link pubblico alla lista dei servizi -->
             <a class="button primary" href="{% url 'service-list' %}">Consulta i servizi</a>
-           <a class="button secondary" href="{% url 'login' %}">Accedi</a>
+
+            {% if user.is_authenticated %}
+                {% if perms.core.change_service %}
+                    <!-- Accesso rapido per amministratori -->
+                    <a class="button secondary" href="{% url 'admin-dashboard' %}">Vai alla gestione</a>
+                {% elif perms.core.can_access_professional_area %}
+                    <!-- Accesso rapido per professionisti -->
+                    <a class="button secondary" href="{% url 'professional-dashboard' %}">Vai alla tua area</a>
+                {% elif perms.core.can_access_customer_area %}
+                    <!-- Accesso rapido per clienti -->
+                    <a class="button secondary" href="{% url 'customer-dashboard' %}">Vai alla tua area</a>
+                {% endif %}
+            {% else %}
+                <!-- Link alla pagina di login per utenti non autenticati -->
+                <a class="button secondary" href="{% url 'login' %}">Accedi</a>
+            {% endif %}
         </div>
     </div>
 
-    <div class="hero-card">
+    <div class="info-card">
         <h2>Area progetto PSW</h2>
+        <p>Questa home usa template Django, CSS statico e sessione tramite cookie.</p>
 
-        <p>
-            Questa home usa template Django, CSS statico e sessione tramite cookie.
-        </p>
-
-        <div class="visit-box">
+        <div class="session-box">
             <span>Visite in questa sessione</span>
             <strong>{{ num_visits }}</strong>
         </div>
     </div>
 </section>
 
-<section class="stats-grid">
-    <!-- Dati calcolati nella view index -->
-    <article class="stat-card">
-        <span>Servizi attivi</span>
-        <strong>{{ active_services_count }}</strong>
-    </article>
+{% if user.is_authenticated and perms.core.change_service %}
+    <!-- Home sintetica per amministratori -->
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span>Servizi attivi</span>
+            <strong>{{ active_services_count }}</strong>
+        </article>
 
-    <article class="stat-card">
-        <span>Professionisti</span>
-        <strong>{{ professionals_count }}</strong>
-    </article>
+        <article class="stat-card">
+            <span>Clienti registrati</span>
+            <strong>{{ admin_total_customers }}</strong>
+        </article>
 
-    <article class="stat-card">
-        <span>Appuntamenti registrati</span>
-        <strong>{{ appointments_count }}</strong>
-    </article>
+        <article class="stat-card">
+            <span>Professionisti</span>
+            <strong>{{ admin_total_professionals }}</strong>
+        </article>
+
+        <article class="stat-card">
+            <span>Appuntamenti totali</span>
+            <strong>{{ admin_total_appointments }}</strong>
+        </article>
+    </section>
+
+{% elif user.is_authenticated and perms.core.can_access_professional_area %}
+    <!-- Home sintetica per professionisti -->
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span>Appuntamenti assegnati</span>
+            <strong>{{ professional_total_appointments }}</strong>
+        </article>
+
+        <article class="stat-card">
+            <span>In attesa</span>
+            <strong>{{ professional_pending_appointments }}</strong>
+        </article>
+
+        <article class="stat-card">
+            <span>Confermati</span>
+            <strong>{{ professional_confirmed_appointments }}</strong>
+        </article>
+    </section>
+
+{% elif user.is_authenticated and perms.core.can_access_customer_area %}
+    <!-- Home sintetica per clienti -->
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span>Servizi disponibili</span>
+            <strong>{{ active_services_count }}</strong>
+        </article>
+
+        <article class="stat-card">
+            <span>Le tue prenotazioni</span>
+            <strong>{{ customer_total_appointments }}</strong>
+        </article>
+
+        <article class="stat-card">
+            <span>In attesa</span>
+            <strong>{{ customer_pending_appointments }}</strong>
+        </article>
+    </section>
+
+{% else %}
+    <!-- Home pubblica per utenti non autenticati -->
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span>Servizi disponibili</span>
+            <strong>{{ active_services_count }}</strong>
+        </article>
+
+        <article class="stat-card">
+            <span>Professionisti</span>
+            <strong>{{ professionals_count }}</strong>
+        </article>
+    </section>
+{% endif %}
+
+<section class="home-section">
+    <h2>Chi siamo</h2>
+    <p>
+        Lo studio raccoglie professionisti che offrono servizi di consulenza,
+        supporto amministrativo e assistenza tecnica per esigenze organizzative
+        e documentali.
+    </p>
+
+    <div class="profile-grid">
+        {% for professional in professionals %}
+            <article class="profile-card">
+                <!-- Dati pubblici del professionista -->
+                <h3>{{ professional.user.get_full_name|default:professional.user.username }}</h3>
+
+                {% if professional.bio %}
+                    <p>{{ professional.bio }}</p>
+                {% endif %}
+
+                {% if professional.phone %}
+                    <p class="muted-text">Tel: {{ professional.phone }}</p>
+                {% endif %}
+
+                <div class="profile-services">
+                    <strong>Servizi:</strong>
+                    <ul>
+                        {% for service in professional.services.all %}
+                            <li>{{ service.name }}</li>
+                        {% empty %}
+                            <li>Nessun servizio associato.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty-state">
+                <h3>Nessun professionista disponibile</h3>
+                <p>Al momento non sono presenti professionisti pubblicati.</p>
+            </div>
+        {% endfor %}
+    </div>
 </section>
 
-<section class="info-section">
-    <h2>Funzionalità previste</h2>
+<section class="home-section">
+    <h2>Come funziona</h2>
 
     <div class="feature-grid">
-        <div class="feature-card">
-            <h3>Clienti</h3>
-            <p>
-                Registrazione, consultazione servizi, prenotazione appuntamenti
-                e gestione delle proprie richieste.
-            </p>
-        </div>
+        <article class="feature-card">
+            <h3>1. Consulta i servizi</h3>
+            <p>Cerca il servizio più adatto usando la lista pubblica, la ricerca e il filtro per categoria.</p>
+        </article>
 
-        <div class="feature-card">
-            <h3>Professionisti</h3>
-            <p>
-                Visualizzazione degli appuntamenti assegnati e aggiornamento
-                dello stato delle prenotazioni.
-            </p>
-        </div>
+        <article class="feature-card">
+            <h3>2. Prenota</h3>
+            <p>Accedi come cliente, scegli il servizio e seleziona un professionista disponibile.</p>
+        </article>
 
-        <div class="feature-card">
-            <h3>Admin</h3>
-            <p>
-                Gestione di servizi, categorie, utenti, profili e appuntamenti
-                tramite pannello amministrativo.
-            </p>
-        </div>
+        <article class="feature-card">
+            <h3>3. Segui lo stato</h3>
+            <p>Controlla la prenotazione nella tua area riservata e verifica eventuali aggiornamenti.</p>
+        </article>
     </div>
 </section>
 {% endblock %}

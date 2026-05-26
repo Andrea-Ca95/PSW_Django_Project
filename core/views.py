@@ -17,26 +17,68 @@ from .models import (
 
 
 def index(request):
-    # Numero di visite salvato nella sessione del browser.
-    # Se non esiste ancora, parte da 0.
+
+    # Contatore visite salvato nella sessione del browser.
     num_visits = request.session.get("num_visits", 0) + 1
     request.session["num_visits"] = num_visits
 
-    # Dati sintetici mostrati nella home.
-    active_services_count = Service.objects.filter(is_active=True).count()
-    professionals_count = ProfessionalProfile.objects.count()
-    appointments_count = Appointment.objects.count()
+    # Dati pubblici mostrati anche agli utenti non autenticati.
+    active_services = Service.objects.filter(is_active=True)
+    professionals = (
+        ProfessionalProfile.objects
+        .select_related("user")
+        .prefetch_related("services")
+        .order_by("user__last_name", "user__first_name")
+    )
 
-    # Contesto passato al template home.html.
     context = {
         "num_visits": num_visits,
-        "active_services_count": active_services_count,
-        "professionals_count": professionals_count,
-        "appointments_count": appointments_count,
+        "active_services_count": active_services.count(),
+        "professionals_count": professionals.count(),
+        "professionals": professionals,
     }
 
-    return render(request, "core/home.html", context)
+    if request.user.is_authenticated:
+        # Admin: statistiche generali della piattaforma.
+        if request.user.has_perm("core.change_service"):
+            context.update({
+                "admin_total_customers": CustomerProfile.objects.count(),
+                "admin_total_professionals": professionals.count(),
+                "admin_total_appointments": Appointment.objects.count(),
+                "admin_pending_appointments": Appointment.objects.filter(
+                    status=Appointment.STATUS_PENDING
+                ).count(),
+            })
 
+        # Professionista: dati relativi ai propri appuntamenti.
+        elif request.user.has_perm("core.can_access_professional_area"):
+            assigned_appointments = Appointment.objects.filter(operator=request.user)
+
+            context.update({
+                "professional_total_appointments": assigned_appointments.count(),
+                "professional_pending_appointments": assigned_appointments.filter(
+                    status=Appointment.STATUS_PENDING
+                ).count(),
+                "professional_confirmed_appointments": assigned_appointments.filter(
+                    status=Appointment.STATUS_CONFIRMED
+                ).count(),
+            })
+
+        # Cliente: dati relativi alle proprie prenotazioni.
+        elif request.user.has_perm("core.can_access_customer_area"):
+            customer_appointments = Appointment.objects.filter(customer=request.user)
+
+            context.update({
+                "customer_total_appointments": customer_appointments.count(),
+                "customer_pending_appointments": customer_appointments.filter(
+                    status=Appointment.STATUS_PENDING
+                ).count(),
+                "customer_confirmed_appointments": customer_appointments.filter(
+                    status=Appointment.STATUS_CONFIRMED
+                ).count(),
+            })
+
+    return render(request, "core/home.html", context)
 
 def service_list(request):
     # Parametri letti dalla query string.

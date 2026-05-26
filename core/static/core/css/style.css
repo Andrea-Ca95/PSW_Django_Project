@@ -689,3 +689,82 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Sezioni informative della home */
+.home-section {
+    margin-top: 42px;
+}
+
+.home-section > p {
+    max-width: 820px;
+    color: #334155;
+    line-height: 1.6;
+}
+
+/* Griglia dei professionisti nella sezione Chi siamo */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Card pubblica del professionista */
+.profile-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.profile-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.profile-card p {
+    color: #334155;
+    line-height: 1.5;
+}
+
+/* Testo secondario nelle card */
+.muted-text {
+    color: #64748b;
+}
+
+/* Lista dei servizi collegati al professionista */
+.profile-services {
+    margin-top: 14px;
+}
+
+.profile-services ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+}
+
+/* Griglia dei passaggi "Come funziona" */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.feature-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.feature-card h3 {
+    margin-top: 0;
+}
+
+/* Adattamento responsive delle sezioni home */
+@media (max-width: 900px) {
+    .profile-grid,
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
